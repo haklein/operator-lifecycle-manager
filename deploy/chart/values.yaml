@@ -115,7 +115,3 @@ networkPolicy:
       - protocol: UDP
         port: 5353
   kubeAPIServer: {}
-  metrics:
-    ports:
-      - protocol: TCP
-        port: metrics

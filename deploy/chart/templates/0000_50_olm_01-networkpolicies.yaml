@@ -19,7 +19,9 @@ spec:
     matchLabels:
       app: olm-operator
   ingress:
-    - {{ .Values.networkPolicy.metrics | toYaml | nindent 6 | trimSuffix "\n" }}
+    - ports:
+      - protocol: TCP
+        port: {{ if or .Values.certManager.enabled .Values.serviceCa.enabled }}{{ .Values.olm.service.internalPortHttps }}{{ else }}{{ .Values.olm.service.internalPort }}{{ end }}
   egress:
     - {{ .Values.networkPolicy.kubeAPIServer | toYaml | nindent 6 | trimSuffix "\n" }}
     - {{ .Values.networkPolicy.dns | toYaml | nindent 6 | trimSuffix "\n" }}
@@ -37,7 +39,9 @@ spec:
     matchLabels:
       app: catalog-operator
   ingress:
-    - {{ .Values.networkPolicy.metrics | toYaml | nindent 6 | trimSuffix "\n" }}
+    - ports:
+      - protocol: TCP
+        port: {{ if or .Values.certManager.enabled .Values.serviceCa.enabled }}{{ .Values.catalog.service.internalPortHttps }}{{ else }}{{ .Values.catalog.service.internalPort }}{{ end }}
   egress:
     - {{ .Values.networkPolicy.kubeAPIServer | toYaml | nindent 6 | trimSuffix "\n" }}
     - {{ .Values.networkPolicy.dns | toYaml | nindent 6 | trimSuffix "\n" }}
